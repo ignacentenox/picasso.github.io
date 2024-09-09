@@ -4,19 +4,6 @@ let currentVideo = 0;
 
 const videoElement = document.getElementById('playlist');
 
-// Función para activar el modo de pantalla completa
-function openFullscreen() {
-    if (videoElement.requestFullscreen) {
-        videoElement.requestFullscreen();
-    } else if (videoElement.mozRequestFullScreen) { // Firefox
-        videoElement.mozRequestFullScreen();
-    } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        videoElement.webkitRequestFullscreen();
-    } else if (videoElement.msRequestFullscreen) { // IE/Edge
-        videoElement.msRequestFullscreen();
-    }
-}
-
 // Cargar el primer video
 videoElement.src = videos[currentVideo];
 
@@ -28,7 +15,21 @@ videoElement.addEventListener('ended', function () {
 });
 
 // Al hacer clic en el video, activar pantalla completa
-videoElement.addEventListener('click', openFullscreen);
+videoElement.addEventListener('click', function () {
+    if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+    } else if (videoElement.mozRequestFullScreen) { // Firefox
+        videoElement.mozRequestFullScreen();
+    } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        videoElement.webkitRequestFullscreen();
+    } else if (videoElement.msRequestFullscreen) { // IE/Edge
+        videoElement.msRequestFullscreen();
+    }
+});
 
 // Abrir pantalla completa automáticamente al cargar la página
-window.addEventListener('load', openFullscreen);
+window.addEventListener('load', function () {
+    if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+    }
+});
