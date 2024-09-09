@@ -29,6 +29,7 @@ video {
     width: 100%;
     max-height: 80vh;
     margin-top: 20px;
+    cursor: pointer;
 }
 
 /* Asegura que el video cubra toda la pantalla en vertical */
