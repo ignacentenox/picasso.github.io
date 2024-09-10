@@ -7,11 +7,15 @@ const videoElement = document.getElementById('playlist');
 // Cargar el primer video
 videoElement.src = videos[currentVideo];
 
-// Cambiar de video cuando el actual termina
-videoElement.addEventListener('ended', function () {
-    currentVideo = (currentVideo + 1) % videos.length; // Cambia al siguiente video
-    videoElement.src = videos[currentVideo];
-    videoElement.play(); // Reproduce el nuevo video
+// Evitar pantalla en negro o pausa entre videos
+videoElement.addEventListener('timeupdate', function () {
+    // Verifica si faltan menos de 0.5 segundos para que termine el video actual
+    if (videoElement.currentTime > videoElement.duration - 0.5) {
+        // Actualiza el video antes de que termine el actual
+        currentVideo = (currentVideo + 1) % videos.length;
+        videoElement.src = videos[currentVideo];
+        videoElement.play(); // Asegura que el nuevo video comience inmediatamente
+    }
 });
 
 // Al hacer clic en el video, activar pantalla completa
