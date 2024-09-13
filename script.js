@@ -1,39 +1,52 @@
-// Lista de videos
-const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4'];
+// Lista de IDs de videos de YouTube
+const videoIDs = ['u0V3dxZhoNw', 'a1X0CaOZ_AU', 'JvbqYDASJ9A']; // Reemplaza con los IDs de los videos
+
 let currentVideo = 0;
+let player;
 
-const videoElement = document.getElementById('playlist');
+// Función que carga la API de YouTube y configura el reproductor
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '100%',
+        width: '100%',
+        videoId: videoIDs[currentVideo],
+        playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'rel': 0,
+            'showinfo': 0,
+            'modestbranding': 1,
+            'loop': 0
+        },
+        events: {
+            'onStateChange': onPlayerStateChange,
+            'onReady': onPlayerReady
+        }
+    });
+}
 
-// Cargar el primer video
-videoElement.src = videos[currentVideo];
+// Función para manejar cuando el reproductor esté listo
+function onPlayerReady(event) {
+    event.target.playVideo();
+}
 
-// Evitar pantalla en negro o pausa entre videos
-videoElement.addEventListener('timeupdate', function () {
-    // Verifica si faltan menos de 0.5 segundos para que termine el video actual
-    if (videoElement.currentTime > videoElement.duration - 0.5) {
-        // Actualiza el video antes de que termine el actual
-        currentVideo = (currentVideo + 1) % videos.length;
-        videoElement.src = videos[currentVideo];
-        videoElement.play(); // Asegura que el nuevo video comience inmediatamente
+// Función para manejar el cambio de estado del video
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+        currentVideo = (currentVideo + 1) % videoIDs.length; // Pasar al siguiente video
+        player.loadVideoById(videoIDs[currentVideo]); // Cargar el siguiente video
     }
-});
+}
 
-// Al hacer clic en el video, activar pantalla completa
-videoElement.addEventListener('click', function () {
-    if (videoElement.requestFullscreen) {
-        videoElement.requestFullscreen();
-    } else if (videoElement.mozRequestFullScreen) { // Firefox
-        videoElement.mozRequestFullScreen();
-    } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        videoElement.webkitRequestFullscreen();
-    } else if (videoElement.msRequestFullscreen) { // IE/Edge
-        videoElement.msRequestFullscreen();
-    }
-});
-
-// Abrir pantalla completa automáticamente al cargar la página
-window.addEventListener('load', function () {
-    if (videoElement.requestFullscreen) {
-        videoElement.requestFullscreen();
+// Función para forzar la reproducción en pantalla completa
+document.getElementById('player').addEventListener('click', function () {
+    if (player.getIframe().requestFullscreen) {
+        player.getIframe().requestFullscreen();
+    } else if (player.getIframe().mozRequestFullScreen) { // Firefox
+        player.getIframe().mozRequestFullScreen();
+    } else if (player.getIframe().webkitRequestFullscreen) { // Chrome, Safari and Opera
+        player.getIframe().webkitRequestFullscreen();
+    } else if (player.getIframe().msRequestFullscreen) { // IE/Edge
+        player.getIframe().msRequestFullscreen();
     }
 });
