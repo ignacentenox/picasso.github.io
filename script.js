@@ -1,5 +1,5 @@
 // Lista de IDs de videos de YouTube
-const videoIDs = ['6EczRvbmsvw', 'a1X0CaOZ_AU', 'JvbqYDASJ9A']; // Reemplaza con los IDs de los videos
+const videoIDs = ['6EczRvbmsvw', 'IQsc0ezuto', 'HkXmmi3r7Oo']; // Reemplaza con los IDs de los videos
 
 let currentVideo = 0;
 let player;
