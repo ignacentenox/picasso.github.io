@@ -1,52 +1,42 @@
-// Lista de IDs de videos de YouTube
-const videoIDs = ['6EczRvbmsvw', 'IQsc0ezuto', 'HkXmmi3r7Oo']; // Reemplaza con los IDs de los videos
+// Lista de URLs de los videos alojados en tu PC o GitHub
+const videos = [
+    'https://github.com/tu_usuario/tu_repositorio/raw/main/video1.mp4',
+    'https://github.com/tu_usuario/tu_repositorio/raw/main/video2.mp4',
+    'https://github.com/tu_usuario/tu_repositorio/raw/main/video3.mp4'
+];
 
 let currentVideo = 0;
-let player;
 
-// Función que carga la API de YouTube y configura el reproductor
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '100%',
-        width: '100%',
-        videoId: videoIDs[currentVideo],
-        playerVars: {
-            'autoplay': 1,
-            'controls': 0,
-            'rel': 0,
-            'showinfo': 0,
-            'modestbranding': 1,
-            'loop': 0
-        },
-        events: {
-            'onStateChange': onPlayerStateChange,
-            'onReady': onPlayerReady
-        }
-    });
-}
+const videoElement = document.getElementById('playlist');
 
-// Función para manejar cuando el reproductor esté listo
-function onPlayerReady(event) {
-    event.target.playVideo();
-}
+// Cargar el primer video
+videoElement.src = videos[currentVideo];
 
-// Función para manejar el cambio de estado del video
-function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) {
-        currentVideo = (currentVideo + 1) % videoIDs.length; // Pasar al siguiente video
-        player.loadVideoById(videoIDs[currentVideo]); // Cargar el siguiente video
+// Transición continua entre videos sin pantalla negra
+videoElement.addEventListener('timeupdate', function () {
+    if (videoElement.currentTime > videoElement.duration - 0.5) {
+        currentVideo = (currentVideo + 1) % videos.length; // Cambia al siguiente video
+        videoElement.src = videos[currentVideo];
+        videoElement.play(); // Asegura que el nuevo video comience inmediatamente
     }
-}
+});
 
-// Función para forzar la reproducción en pantalla completa
-document.getElementById('player').addEventListener('click', function () {
-    if (player.getIframe().requestFullscreen) {
-        player.getIframe().requestFullscreen();
-    } else if (player.getIframe().mozRequestFullScreen) { // Firefox
-        player.getIframe().mozRequestFullScreen();
-    } else if (player.getIframe().webkitRequestFullscreen) { // Chrome, Safari and Opera
-        player.getIframe().webkitRequestFullscreen();
-    } else if (player.getIframe().msRequestFullscreen) { // IE/Edge
-        player.getIframe().msRequestFullscreen();
+// Hacer clic en el video activa pantalla completa
+videoElement.addEventListener('click', function () {
+    if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+    } else if (videoElement.mozRequestFullScreen) { // Firefox
+        videoElement.mozRequestFullScreen();
+    } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+        videoElement.webkitRequestFullscreen();
+    } else if (videoElement.msRequestFullscreen) { // IE/Edge
+        videoElement.msRequestFullscreen();
+    }
+});
+
+// Abrir pantalla completa automáticamente al cargar la página
+window.addEventListener('load', function () {
+    if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
     }
 });
