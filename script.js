@@ -1,8 +1,8 @@
 // Lista de URLs de los videos alojados en tu PC o GitHub
 const videos = [
-    'https://github.com/tu_usuario/tu_repositorio/raw/main/video1.mp4',
-    'https://github.com/tu_usuario/tu_repositorio/raw/main/video2.mp4',
-    'https://github.com/tu_usuario/tu_repositorio/raw/main/video3.mp4'
+    'https://github.com/ignacentenox/picasso.github.io/blob/main/video%2001.mp4',
+    'https://github.com/ignacentenox/picasso.github.io/blob/main/video%2002.mp4',
+    'https://github.com/ignacentenox/picasso.github.io/blob/main/video%2003.mp4'
 ];
 
 let currentVideo = 0;
